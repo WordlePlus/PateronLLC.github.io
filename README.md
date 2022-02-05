@@ -1,2 +1,2 @@
 # wordle+
-Wordle with any number of letters as many times as you like.
+Wordle with 6 letters and extra guess
