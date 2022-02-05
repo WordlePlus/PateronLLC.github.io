@@ -1,7 +1,5 @@
-import WordRow from './Game.js';
-import LetterBox from './LetterBox.js';
 import React, { useState, useEffect } from 'react';
-import { wordList } from '../six-letter-words.js';
+import LetterBox from './LetterBox.js';
 
 const BoardArea = (props) => {
 	const [squares, setSquares] = useState([]);
@@ -11,8 +9,8 @@ const BoardArea = (props) => {
 	};
 
 	return (
-		<div>
-			<div>{props.finalWord}</div>
+		<div className="board-area">
+      <div>{props.finalWord}</div>
 			<div className="word-row">
 				{renderSquare(0)}
 				{renderSquare(1)}

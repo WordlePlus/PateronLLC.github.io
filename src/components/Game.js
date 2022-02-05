@@ -7,7 +7,7 @@ const Game = () => {
 
 	useEffect(() => {
 		getWord();
-	}, []);
+	},[]);
 
 	const getWord = () => {
 		const word = wordList[Math.floor(Math.random() * wordList.length)];
