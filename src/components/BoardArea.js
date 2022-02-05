@@ -4,8 +4,8 @@ import LetterBox from './LetterBox.js';
 const BoardArea = (props) => {
 	const [squares, setSquares] = useState([]);
 
-	const renderSquare = (i) => {
-		return <LetterBox letter={i} onClick={() => props.onClick(i)} />;
+	const renderSquare = (char) => {
+    return <LetterBox letter={char} onClick={() => props.onClick()} />;
 	};
 
 	return (
