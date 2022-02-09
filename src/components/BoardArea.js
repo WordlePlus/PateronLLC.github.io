@@ -2,70 +2,90 @@ import React, { useState, useEffect } from 'react';
 import LetterBox from './LetterBox.js';
 
 const BoardArea = (props) => {
-	const [squares, setSquares] = useState([]);
+	const [squares, setSquares] = useState([[], [], [], [], [], [], []]);
+	const [currentSquare, setCurrentSquare] = useState([0, 0]);
+
+	useEffect(() => {
+		window.addEventListener('keydown', (e) => {
+			if (e.key.match(/^[A-Za-z]{1}$/g)) {
+				console.log(e.key);
+				setSquares(squares[currentSquare[0]][currentSquare[1]], e.key);
+				if (currentSquare[1] % 6 === 5) {
+					setCurrentSquare([currentSquare[0]++, 0]); //
+				} else {
+					setCurrentSquare([currentSquare[0], currentSquare[1]++]);
+				}
+				// } else if (e.key === 'Backspace') {
+				// 					dispatch(removeLetter())
+				// 			} else if (e.key === 'Enter') {
+				// 					dispatch(makeGuess())
+			}
+			console.log(currentSquare);
+		});
+	}, []);
 
 	const renderSquare = (char) => {
-    return <LetterBox letter={char} onClick={() => props.onClick()} />;
+		return <LetterBox letter={char} onKeyPress={() => props.onClick()} />;
 	};
 
 	return (
 		<div className="board-area">
-      <div>{props.finalWord}</div>
+			<div>{props.finalWord}</div>
 			<div className="word-row">
-				{renderSquare(0)}
-				{renderSquare(1)}
-				{renderSquare(2)}
-				{renderSquare(3)}
-				{renderSquare(4)}
-				{renderSquare(5)}
+				{renderSquare()}
+				{renderSquare()}
+				{renderSquare()}
+				{renderSquare()}
+				{renderSquare()}
+				{renderSquare()}
 			</div>
 			<div className="word-row">
-				{renderSquare(6)}
-				{renderSquare(7)}
-				{renderSquare(8)}
-				{renderSquare(9)}
-				{renderSquare(10)}
-				{renderSquare(11)}
+				{renderSquare()}
+				{renderSquare()}
+				{renderSquare()}
+				{renderSquare()}
+				{renderSquare()}
+				{renderSquare()}
 			</div>
 			<div className="word-row">
-				{renderSquare(12)}
-				{renderSquare(13)}
-				{renderSquare(14)}
-				{renderSquare(15)}
-				{renderSquare(16)}
-				{renderSquare(17)}
+				{renderSquare()}
+				{renderSquare()}
+				{renderSquare()}
+				{renderSquare()}
+				{renderSquare()}
+				{renderSquare()}
 			</div>
 			<div className="word-row">
-				{renderSquare(18)}
-				{renderSquare(19)}
-				{renderSquare(20)}
-				{renderSquare(21)}
-				{renderSquare(22)}
-				{renderSquare(23)}
+				{renderSquare()}
+				{renderSquare()}
+				{renderSquare()}
+				{renderSquare()}
+				{renderSquare()}
+				{renderSquare()}
 			</div>
 			<div className="word-row">
-				{renderSquare(24)}
-				{renderSquare(25)}
-				{renderSquare(26)}
-				{renderSquare(27)}
-				{renderSquare(28)}
-				{renderSquare(29)}
+				{renderSquare()}
+				{renderSquare()}
+				{renderSquare()}
+				{renderSquare()}
+				{renderSquare()}
+				{renderSquare()}
 			</div>
 			<div className="word-row">
-				{renderSquare(30)}
-				{renderSquare(31)}
-				{renderSquare(32)}
-				{renderSquare(33)}
-				{renderSquare(34)}
-				{renderSquare(35)}
+				{renderSquare()}
+				{renderSquare()}
+				{renderSquare()}
+				{renderSquare()}
+				{renderSquare()}
+				{renderSquare()}
 			</div>
 			<div className="word-row">
-				{renderSquare(36)}
-				{renderSquare(37)}
-				{renderSquare(38)}
-				{renderSquare(39)}
-				{renderSquare(40)}
-				{renderSquare(41)}
+				{renderSquare()}
+				{renderSquare()}
+				{renderSquare()}
+				{renderSquare()}
+				{renderSquare()}
+				{renderSquare()}
 			</div>
 		</div>
 	);
