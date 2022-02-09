@@ -7,10 +7,10 @@ const Game = () => {
 
 	useEffect(() => {
 		getWord();
-	},[]);
+	}, []);
 
 	const getWord = () => {
-		const word = wordList[Math.floor(Math.random() * wordList.length)];
+		const word = wordList[Math.floor(Math.random() * wordList.length)]; // + '👄👩🏻‍🌾🙏🏼🧎🏼🍇';
 		setFinalWord(word);
 	};
 
