@@ -22,7 +22,11 @@ const BoardArea = (props) => {
             console.log('Changing current column', prevState.currentSquare[1] + 1);
             prevState.currentSquare = [prevState.currentSquare[0], prevState.currentSquare[1] + 1];
           }
+          // TODO: add logic here to handle when the 'squares' array is full.  currently throws error
+
           return prevState;
+          // TODO: add logic for when a user presses backspace or enter
+
           // } else if (e.key === 'Backspace') {
           // 					dispatch(removeLetter())
           // 			} else if (e.key === 'Enter') {
