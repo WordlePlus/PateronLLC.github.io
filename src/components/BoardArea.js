@@ -17,38 +17,34 @@ const BoardArea = (props) => {
 
 	useEffect(() => {
 		function handleKeyDown (e) {
-			if (e.key.match(/^[A-Za-z]{1}$/g)) {
+			if (e.key.match(/^[A-Za-z]{1}$/g) && gameBoard.currentSquare != [6,5]) {
 				console.log('Keydown Event: ', e.key);
-				
-        setGameBoard((prevState) => {
-					console.log('prevState squares: ', prevState.squares);
-					prevState.squares[prevState.currentSquare[0]][
-						prevState.currentSquare[1]
-					] = e.key;
+				if (gameBoard.currentSquare[1] % 6 !== 5) {
+				//update state values in separate variables so that they can be passed to setGameBoard.
+				const newSquares = gameBoard.squares;
+				const newCurrSquare = gameBoard.currentSquare;
 
-					if (prevState.currentSquare[1] % 6 === 5) {
-            
-						prevState.currentSquare = [prevState.currentSquare[0] + 1, 0];
-					} else {
-						prevState.currentSquare = [
-							prevState.currentSquare[0],
-							prevState.currentSquare[1] + 1,
-						];
-					}
-					// TODO: add logic here to handle when the 'squares' array is full.  currently throws error
+				newSquares[newCurrSquare[0]][newCurrSquare[1]] = e.key;
+				newCurrSquare[1]++;
+				console.log('prevState squares: ', gameBoard.squares);
 
-					return prevState;
-					// TODO: add logic for when a user presses backspace or enter
-
+        setGameBoard(prevState => ({
+					squares: newSquares,
+					currentSquare: newCurrSquare,
+				}));
+			}
+			} else {
+					// TODO: add logic for when a user presses backspace or enter				
 					// } else if (e.key === 'Backspace') {
 					// 					dispatch(removeLetter())
 					// 			} else if (e.key === 'Enter') {
 					// 					dispatch(makeGuess())
-				});
 			}
-		};
 
+		};
+	
 		document.addEventListener('keydown', handleKeyDown);
+		// return document.removeEventListener('keydown', handleKeyDown);
 	}, []);
 
 	const renderSquare = (char, key) => {
