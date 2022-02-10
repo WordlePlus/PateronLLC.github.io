@@ -49,7 +49,7 @@ const BoardArea = (props) => {
 	}, []);
 
 	const renderSquare = (char, key) => {
-		return <LetterBox key={Math.floor(Math.random() * 100000)} letter={char} />;
+		return <LetterBox key={key} char={char} />;
 	};
 
 	return (
@@ -58,9 +58,10 @@ const BoardArea = (props) => {
 			{gameBoard.squares.map((el, idx) => {
 				const row = idx;
 				return (
-					<div className="word-row" key={idx}>
-						{gameBoard.squares[row].map((char, idx) => {
-							return renderSquare(char, idx * 100);
+					<div className="word-row" key={row}>
+						{gameBoard.squares[row].map((char, col) => {
+              const key = row.toString() + col.toString();
+							return renderSquare(char, key);
 						})}
 					</div>
 				);

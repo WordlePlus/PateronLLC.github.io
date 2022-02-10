@@ -1,11 +1,11 @@
 const LetterBox = (props) => {
-	return (
+  return (
 		<div className="letter-box">
 			<span className="tooltip-text">
 				Sully is a Silly Goose! <br />
 				🦢
 			</span>
-			{props.letter}
+			{props.char}
 		</div>
 	);
 };
