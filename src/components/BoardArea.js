@@ -16,16 +16,18 @@ const BoardArea = (props) => {
 	});
 
 	useEffect(() => {
-		const handleKeyDown = (e) => {
+		function handleKeyDown (e) {
 			if (e.key.match(/^[A-Za-z]{1}$/g)) {
 				console.log('Keydown Event: ', e.key);
-				setGameBoard((prevState) => {
-					console.log('Current squares: ', prevState.squares);
+				
+        setGameBoard((prevState) => {
+					console.log('prevState squares: ', prevState.squares);
 					prevState.squares[prevState.currentSquare[0]][
 						prevState.currentSquare[1]
 					] = e.key;
 
 					if (prevState.currentSquare[1] % 6 === 5) {
+            
 						prevState.currentSquare = [prevState.currentSquare[0] + 1, 0];
 					} else {
 						prevState.currentSquare = [
@@ -45,6 +47,7 @@ const BoardArea = (props) => {
 				});
 			}
 		};
+
 		document.addEventListener('keydown', handleKeyDown);
 	}, []);
 
@@ -55,12 +58,11 @@ const BoardArea = (props) => {
 	return (
 		<div className="board-area">
 			<div>{props.finalWord}</div>
-			{gameBoard.squares.map((el, idx) => {
-				const row = idx;
+			{gameBoard.squares.map((rowArray, rowIndex) => {
 				return (
-					<div className="word-row" key={row}>
-						{gameBoard.squares[row].map((char, col) => {
-              const key = row.toString() + col.toString();
+					<div className="word-row" key={rowIndex}>
+						{gameBoard.squares[rowIndex].map((char, col) => {
+              const key = rowIndex.toString() + col.toString();
 							return renderSquare(char, key);
 						})}
 					</div>
