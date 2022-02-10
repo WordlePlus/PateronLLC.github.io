@@ -17,32 +17,37 @@ const BoardArea = (props) => {
 
 	useEffect(() => {
 		function handleKeyDown (e) {
-			if (e.key.match(/^[A-Za-z]{1}$/g) && gameBoard.currentSquare != [6,5]) {
-				console.log('Keydown Event: ', e.key);
-				if (gameBoard.currentSquare[1] % 6 !== 5) {
+			const newSquares = gameBoard.squares;
+			const newCurrSquare = gameBoard.currentSquare;
+			console.log('Keydown Event: ', e.key);
+			
+			if (e.key.match(/^[A-Za-z]{1}$/g)) {
+				if (newCurrSquare[1] !== 5) {
+					//If we aren't at end of row, add key to state and increment currentSquare.
+					newSquares[newCurrSquare[0]][newCurrSquare[1]] = e.key;
+					newCurrSquare[1]++;
+				} else {
+					//If we ARE at end of row, add key to end row state and persist currentSquare.
+					newSquares[newCurrSquare[0]][newCurrSquare[1]] = e.key;
+				}
+
+			} else if(e.key.match('Backspace'||'Delete') && newCurrSquare[1] !== 0) {
 				//update state values in separate variables so that they can be passed to setGameBoard.
-				const newSquares = gameBoard.squares;
-				const newCurrSquare = gameBoard.currentSquare;
+				newSquares[newCurrSquare[0]][newCurrSquare[1]] = '';
+				newCurrSquare[1]--;
 
-				newSquares[newCurrSquare[0]][newCurrSquare[1]] = e.key;
-				newCurrSquare[1]++;
-				console.log('prevState squares: ', gameBoard.squares);
+			} else if(e.key.match('Enter'||'Return') && newCurrSquare[1] === 5 && newSquares[newCurrSquare[0]][newCurrSquare[1]] !== ''){
+				if(gameBoard.currentSquare[0] !== 6)
+				newCurrSquare[0]++;
+				newCurrSquare[1] = 0;
+			};
 
-        setGameBoard(prevState => ({
-					squares: newSquares,
-					currentSquare: newCurrSquare,
-				}));
-			}
-			} else {
-					// TODO: add logic for when a user presses backspace or enter				
-					// } else if (e.key === 'Backspace') {
-					// 					dispatch(removeLetter())
-					// 			} else if (e.key === 'Enter') {
-					// 					dispatch(makeGuess())
-			}
-
-		};
-	
+			//update state
+			setGameBoard(prevState => ({
+				squares: newSquares,
+				currentSquare: newCurrSquare,
+			}));
+		}
 		document.addEventListener('keydown', handleKeyDown);
 		// return document.removeEventListener('keydown', handleKeyDown);
 	}, []);
