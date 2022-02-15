@@ -5,16 +5,17 @@ import { wordList } from '../six-letter-words.js';
 const Game = () => {
 	const [finalWord, setFinalWord] = useState();
 
-	useEffect(() => {
-		getWord();
-	}, []);
-
-	const getWord = () => {
-		const word = wordList[Math.floor(Math.random() * wordList.length)]; // + '👄👩🏻‍🌾🙏🏼🧎🏼🍇';
-		setFinalWord(word);
+	const getNewWord = () => {
+		const word = wordList[Math.floor(Math.random() * wordList.length)];
+		console.log('The secret word is: ', word);
+		return word;
 	};
 
-	return <BoardArea finalWord={finalWord} />;
+	useEffect(() => {
+		setFinalWord(getNewWord());
+	}, []);
+
+	return <BoardArea finalWord={finalWord} getNewWord={setFinalWord} />;
 };
 
 export default Game;
