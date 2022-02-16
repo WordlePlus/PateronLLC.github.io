@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import LetterBox from './LetterBox.js';
 
 const BoardArea = ({ setFinalWord, finalWord }) => {
+  // TODO: What if we used a single matrix to track squares, and properties associated with each square?  I.e. combine squares array and colors array
   const [squares, setSquares] = useState(
     Array.from({ length: 2 }, (value, index) => Array.from({ length: 6 }, (value1, index1) => '')),
   );
@@ -12,27 +13,27 @@ const BoardArea = ({ setFinalWord, finalWord }) => {
   );
   const [currSquare, setCurrSquare] = useState([0, 0]);
 
-  
   useEffect(() => {
-    const resetBoard = () =>{
+    const resetBoard = () => {
       const newSquares = Array.from({ length: 2 }, (value, index) =>
         Array.from({ length: 6 }, (value1, index1) => ''),
-        );
+      );
       const newSquareColors = Array.from({ length: 2 }, (value, index) =>
         Array.from({ length: 6 }, (value1, index1) => 'gray'),
-        );
+      );
       const newCurrSquare = [0, 0];
-      setSquares(()=>newSquares);
-      setSquareColors(()=>newSquareColors);
-      setCurrSquare(()=>newCurrSquare);
+      setSquares(() => newSquares);
+      setSquareColors(() => newSquareColors);
+      setCurrSquare(() => newCurrSquare);
       setFinalWord();
-    }
-    
+    };
+
     document.addEventListener('keydown', handleKeyDown);
 
     function handleKeyDown({ key }) {
       let newSquares = squares.slice();
       let newCurrSquare = currSquare.slice();
+      console.log(key);
 
       switch (true) {
         case /^[A-Za-z]{1}$/g.test(key):
@@ -54,17 +55,36 @@ const BoardArea = ({ setFinalWord, finalWord }) => {
             console.log('hi, Cameron is right');
           }
           break;
-        
+
         case (key === 'Enter' || key === 'Return') && currSquare[1] === squares[0].length:
-          //color the keys in each row 
+
+          const finalWordLetterCache = {};
+          finalWord.split('').forEach((value, index) => {
+            if (!finalWordLetterCache.hasOwnProperty(value))
+              finalWordLetterCache[value] = { indices: [index] };
+            else {
+              finalWordLetterCache[value].indices.push(index);
+            }
+          });
+          console.log(finalWordLetterCache);
           newSquares[newCurrSquare[0]].forEach((square, squareIndex) => {
+            if (finalWordLetterCache.hasOwnProperty(square)) {
+              // Letter matches location, turn green
+              if (finalWordLetterCache[square].indices
+            }
+          })
+
+
+          //color the keys in each row
+          newSquares[newCurrSquare[0]].forEach((square, squareIndex) => {
+            // If the square's letter matches the location of the word's letter, color green
             if (square === finalWord[squareIndex]) {
               setSquareColors((state) => {
                 let newColors = state.slice();
                 newColors[newCurrSquare[0]][squareIndex] = 'green';
                 return newColors;
               });
-            } else if (finalWord.includes(square)){
+            } else if (finalWord.includes(square)) {
               setSquareColors((state) => {
                 let newColors = state.slice();
                 newColors[newCurrSquare[0]][squareIndex] = 'yellow';
@@ -77,7 +97,7 @@ const BoardArea = ({ setFinalWord, finalWord }) => {
           const rowWord = newSquares[newCurrSquare[0]].join('');
           if (rowWord === finalWord) {
             console.log(rowWord, 'You are a wizard.  You are a winner.  Here is 1 buttcoin⭐');
-            resetBoard()
+            resetBoard();
           } else if (newCurrSquare[0] >= squares.length - 1) {
             console.log('This is what you are: loser LOSER loser');
             resetBoard();
@@ -91,7 +111,7 @@ const BoardArea = ({ setFinalWord, finalWord }) => {
 
         default:
           console.log("Key down event didn't match");
-        }
+      }
     }
 
     // clear event listener
