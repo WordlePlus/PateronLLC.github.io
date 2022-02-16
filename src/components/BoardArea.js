@@ -1,104 +1,109 @@
 import React, { useState, useEffect } from 'react';
 import LetterBox from './LetterBox.js';
 
-const BoardArea = (props) => {
-	const [gameBoard, setGameBoard] = useState({
-		squares: [
-			Array(6).fill(''),
-			Array(6).fill(''),
-			Array(6).fill(''),
-			Array(6).fill(''),
-			Array(6).fill(''),
-			Array(6).fill(''),
-			Array(6).fill(''),
-		],
-		currentSquare: [0, 0],
-		finalWord: props.finalWord,
-	});
+const BoardArea = ({ setFinalWord, finalWord }) => {
+  const [squares, setSquares] = useState(
+    Array.from({ length: 2 }, (value, index) => Array.from({ length: 6 }, (value1, index1) => '')),
+  );
+  const [squareColor, setSquareColor] = useState(
+    Array.from({ length: 2 }, (value, index) =>
+      Array.from({ length: 6 }, (value1, index1) => 'gray'),
+    ),
+  );
+  const [currSquare, setCurrSquare] = useState([0, 0]);
 
-	console.log('finalword in boardarea ', props.finalWord);
-	useEffect(() => {
-		document.addEventListener('keydown', handleKeyDown);
-		console.log('finalword in useEffect ', gameBoard.finalWord);
+  console.log('finalWord in boardarea: ', finalWord);
 
-		function handleKeyDown({ key }) {
-			setGameBoard((state) => {
-				let newSquares = state.squares.slice();
-				let newCurrSquare = state.currentSquare.slice();
-				let newFinalWord = state.finalWord;
-				console.log(key);
+  useEffect(() => {
+    document.addEventListener('keydown', handleKeyDown);
 
-				if (key.match(/^[A-Za-z]{1}$/g)) {
-					if (newCurrSquare[1] < 6) {
-						newSquares[newCurrSquare[0]][newCurrSquare[1]] = key;
-						newCurrSquare[1]++;
-					}
-				} else if (key.match('Backspace' || 'Delete')) {
-					if (newCurrSquare[1] !== 0) {
-						newSquares[newCurrSquare[0]][newCurrSquare[1] - 1] = '';
-						newCurrSquare[1]--;
-					} else {
-						console.log('hi, Cameron is right');
-					}
-				} else if (key.match('Enter' || 'Return') && newCurrSquare[1] === 6) {
-					console.log(newCurrSquare[0]);
-					//	TODO - TEST IF ENDERED WORD MATCHES THE MAGIC WORD
-					const rowWord = newSquares[newCurrSquare[0]].join('');
-					console.log(newFinalWord);
-					if (rowWord === newFinalWord) {
-						console.log(
-							rowWord,
-							'You are a wizard.  You are a winner.  Here is 1 buttcoin'
-						);
-					}
-					if (newCurrSquare[0] >= 6) {
-						console.log('loser LOSER loser');
+    function handleKeyDown({ key }) {
+      let newSquares = squares.slice();
+      let newCurrSquare = currSquare.slice();
+      console.log({ key });
 
-						newSquares = [
-							Array(6).fill(''),
-							Array(6).fill(''),
-							Array(6).fill(''),
-							Array(6).fill(''),
-							Array(6).fill(''),
-							Array(6).fill(''),
-							Array(6).fill(''),
-						];
-						newCurrSquare = [0, 0];
-					} else {
-						newCurrSquare[0]++;
-						newCurrSquare[1] = 0;
-					}
-				}
+      switch (true) {
+        case /^[A-Za-z]{1}$/g.test(key):
+          if (newCurrSquare[1] < squares[0].length) {
+            newSquares[newCurrSquare[0]][newCurrSquare[1]] = key;
 
-				return {
-					squares: newSquares,
-					currentSquare: newCurrSquare,
-				};
-			});
-		}
-	}, [gameBoard.finalWord]);
+            newCurrSquare[1]++;
+          }
+          break;
 
-	useEffect(() => {}, []);
+        case key === 'Backspace' || key === 'Delete':
+          if (newCurrSquare[1] !== 0) {
+            newSquares[newCurrSquare[0]][newCurrSquare[1] - 1] = '';
+            newCurrSquare[1]--;
+          } else {
+            console.log('hi, Cameron is right');
+          }
+          break;
 
-	const renderSquare = (char, key) => {
-		return <LetterBox key={key} char={char} />;
-	};
+        case (key === 'Enter' || key === 'Return') && currSquare[1] === squares[0].length:
+          // color changing logic here?
+          newSquares[newCurrSquare[0]].forEach((square, squareIndex) => {
+            if (square === finalWord[squareIndex]) {
+              setSquareColor((state) => {
+                let newColors = state.slice();
+                console.log(newColors);
+                newColors[newCurrSquare[0]][squareIndex] = 'green';
+                return newColors;
+              });
+            }
+          });
 
-	return (
-		<div className="board-area">
-			<div>{props.finalWord}</div>
-			{gameBoard.squares.map((rowArray, rowIndex) => {
-				return (
-					<div className="word-row" key={rowIndex}>
-						{gameBoard.squares[rowIndex].map((char, col) => {
-							const key = rowIndex.toString() + col.toString();
-							return renderSquare(char, key);
-						})}
-					</div>
-				);
-			})}
-		</div>
-	);
+          const rowWord = newSquares[newCurrSquare[0]].join('');
+          if (rowWord === finalWord) {
+            console.log(rowWord, 'You are a wizard.  You are a winner.  Here is 1 buttcoin⭐');
+            setFinalWord();
+            newSquares = Array.from({ length: 2 }, (value, index) =>
+              Array.from({ length: 6 }, (value1, index1) => ''),
+            );
+            newCurrSquare = [0, 0];
+          } else if (newCurrSquare[0] >= squares.length - 1) {
+            console.log('This is what you are: loser LOSER loser');
+            setFinalWord();
+            newSquares = Array.from({ length: 2 }, (value, index) =>
+              Array.from({ length: 6 }, (value1, index1) => ''),
+            );
+            newCurrSquare = [0, 0];
+          } else {
+            newCurrSquare[0]++;
+            newCurrSquare[1] = 0;
+          }
+          break;
+        default:
+          console.log("Key down event didn't match");
+      }
+      console.log('squarecolor', squareColor);
+      setSquares(() => newSquares);
+      setCurrSquare(() => newCurrSquare);
+    }
+
+    // clear event listener
+    return () => document.removeEventListener('keydown', handleKeyDown);
+  }, [finalWord, setFinalWord, currSquare, squares]);
+
+  const renderSquare = (char, key, color) => {
+    return <LetterBox key={key} char={char} color={color} />;
+  };
+
+  return (
+    <div className="board-area">
+      <div>{finalWord}</div>
+      {squares.map((rowArray, rowIndex) => {
+        return (
+          <div className="word-row" key={rowIndex}>
+            {rowArray.map((char, colIndex) => {
+              const key = rowIndex.toString() + colIndex.toString();
+              return renderSquare(char, key, squareColor[rowIndex][colIndex]);
+            })}
+          </div>
+        );
+      })}
+    </div>
+  );
 };
 
 export default BoardArea;
