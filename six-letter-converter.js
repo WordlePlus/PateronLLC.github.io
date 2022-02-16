@@ -3,7 +3,7 @@ const fs = require('fs');
 const writeSixLetterWordStream = fs.createWriteStream('./six-letter-words.js', {
   highWaterMark: 100000 * 1024,
 });
-const readWordStream = fs.createReadStream('./wordlist_10000.txt', {
+const readWordStream = fs.createReadStream('./wiki-100k.txt', {
   highWaterMark: 100000 * 1024,
 });
 
@@ -11,7 +11,7 @@ const doOnNewBatch = (chunk) => {
   const allSwords = chunk.toString().split(/\r?\n/);
   const sixLetterSwords = [];
   allSwords.forEach((element, index) => {
-    if (element.length === 6) {
+    if (element.length === 6 && element) {
       sixLetterSwords.push(element);
       // console.log('New word added!', index);
     }

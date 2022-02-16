@@ -4,7 +4,7 @@ import { wordList } from '../six-letter-words.js';
 
 const Game = () => {
   const getNewWord = () => {
-    const word = wordList[Math.floor(Math.random() * wordList.length)];
+    const word = wordList[Math.floor(Math.random() * wordList.length)].toUpperCase();
     console.log('The secret word in Game component is: ', word);
     return word;
   };
