@@ -1,39 +1,47 @@
 import React, { useState, useEffect } from 'react';
-import { Button, Dialog, DialogContent, DialogContentText, DialogTitle, Grid, Paper, Slide, Typography, useTheme } from "@mui/material";
+import {
+	Button,
+	Dialog,
+	DialogContent,
+	DialogContentText,
+	DialogTitle,
+} from '@mui/material';
 import LetterBox from './LetterBox.js';
 import { wordList } from '../six-letter-words.js';
 
 const BoardArea = ({ setFinalWord, finalWord }) => {
 	// TODO: What if we used a single matrix to track squares, and properties associated with each square?  I.e. combine squares array and colors array
 	const [squares, setSquares] = useState(
-		Array.from({ length: 2 }, (value, index) =>
+		Array.from({ length: 7 }, (value, index) =>
 			Array.from({ length: 6 }, (value1, index1) => '')
 		)
 	);
 	const [squareColors, setSquareColors] = useState(
-		Array.from({ length: 2 }, (value, index) =>
+		Array.from({ length: 7 }, (value, index) =>
 			Array.from({ length: 6 }, (value1, index1) => 'gray')
 		)
 	);
 	const [currSquare, setCurrSquare] = useState([0, 0]);
-  const [gameOver, setGameOver] = useState(false);
-
+	const [gameOver, setGameOver] = useState(false);
+  const [won, setWon] = useState(false);
+  
+  const resetBoard = () => {
+    const newSquares = Array.from({ length: 7 }, (value, index) =>
+      Array.from({ length: 6 }, (value1, index1) => '')
+    );
+    const newSquareColors = Array.from({ length: 7 }, (value, index) =>
+      Array.from({ length: 6 }, (value1, index1) => 'gray')
+    );
+    const newCurrSquare = [0, 0];
+    setSquares(() => newSquares);
+    setSquareColors(() => newSquareColors);
+    setCurrSquare(() => newCurrSquare);
+    setFinalWord();
+  };
+  
 	useEffect(() => {
 		const deepClone = (items) =>
 			items.map((item) => (Array.isArray(item) ? deepClone(item) : item));
-		const resetBoard = () => {
-			const newSquares = Array.from({ length: 2 }, (value, index) =>
-				Array.from({ length: 6 }, (value1, index1) => '')
-			);
-			const newSquareColors = Array.from({ length: 2 }, (value, index) =>
-				Array.from({ length: 6 }, (value1, index1) => 'gray')
-			);
-			const newCurrSquare = [0, 0];
-			setSquares(() => newSquares);
-			setSquareColors(() => newSquareColors);
-			setCurrSquare(() => newCurrSquare);
-			setFinalWord();
-		};
 
 		document.addEventListener('keydown', handleKeyDown);
 
@@ -41,6 +49,7 @@ const BoardArea = ({ setFinalWord, finalWord }) => {
 			let newSquares = deepClone(squares);
 			let newSquareColors = deepClone(squareColors);
 			let newCurrSquare = deepClone(currSquare);
+      let usedWord = false;
 			console.log(key);
 
 			switch (true) {
@@ -71,9 +80,20 @@ const BoardArea = ({ setFinalWord, finalWord }) => {
 					}
 					break;
 
-				case (key === 'Enter' || key === 'Return') &&
-					currSquare[1] === squares[0].length:
+				case (key === 'Enter' || key === 'Return') && currSquare[1] === squares[0].length:
 					const currGuess = newSquares[newCurrSquare[0]].join('');
+          
+          //Check if guess has already been made
+          for(let idx = 0; idx < currSquare[0]; idx++){
+            const wordJoin = newSquares[idx].join('');
+            console.log(wordJoin, currGuess)
+            if (wordJoin === currGuess) {
+              usedWord = true;
+            }
+          }
+          
+          
+
 					// Check word against wordlist, turn row red if not in list
 					if (!wordList.includes(currGuess.toLowerCase())) {
 						console.error('That word is not in our word list');
@@ -81,7 +101,13 @@ const BoardArea = ({ setFinalWord, finalWord }) => {
 							newSquareColors[newCurrSquare[0]][idx] = 'red';
 						}
 						setSquareColors(() => newSquareColors);
-					} else {
+					} else if (usedWord){
+            console.log('You already guessed that word, dodo brain!');
+            for (let idx in newSquareColors[newCurrSquare[0]]) {
+							newSquareColors[newCurrSquare[0]][idx] = 'red';
+						}
+						setSquareColors(() => newSquareColors);
+          } else {
 						// Cache letter frequency in finalWord
 						const finalWordLetterCache = {};
 						finalWord.split('').forEach((value, index) => {
@@ -125,7 +151,7 @@ const BoardArea = ({ setFinalWord, finalWord }) => {
 								finalWordLetterCache[square]--;
 							}
 						});
-            
+
 						setSquareColors(() => newSquareColors);
 
 						//check to see if the row matches the final word
@@ -134,12 +160,12 @@ const BoardArea = ({ setFinalWord, finalWord }) => {
 								currGuess,
 								'⭐You are a wizard.  You are a winner.  Here is 1 buttcoin⭐'
 							);
-              setGameOver(true);
-							resetBoard();
+              setWon(true);
+							setGameOver(true);
 						} else if (newCurrSquare[0] >= squares.length - 1) {
 							console.log('This is what you are: loser LOSER loser');
-              setGameOver(true);
-							resetBoard();
+              setWon(false);
+							setGameOver(true);
 						} else {
 							newCurrSquare[0]++;
 							newCurrSquare[1] = 0;
@@ -161,25 +187,44 @@ const BoardArea = ({ setFinalWord, finalWord }) => {
 		return <LetterBox key={key} char={char} color={color} />;
 	};
 
-	return <>
-    <Dialog open={gameOver} onClose={() => setGameOver(false)}>
-      <h1>dialog open!</h1>
-    </Dialog>
-      
-		<div className="board-area">
-			<div>{finalWord}</div>
-			{squares.map((rowArray, rowIndex) => {
-				return (
-					<div className="word-row" key={rowIndex}>
-						{rowArray.map((char, colIndex) => {
-							const key = rowIndex.toString() + colIndex.toString();
-							return renderSquare(char, key, squareColors[rowIndex][colIndex]);
-						})}
-					</div>
-				);
-			})}
-		</div>
-  </>;
+	return (
+		<>
+			<Dialog
+				open={gameOver}
+				onClose={() => {
+          resetBoard();
+          setGameOver(false);
+				}}
+			>
+				<DialogTitle>{won ? 'You won! 🎈' : 'You lost! 🤢😔🤢'}</DialogTitle>
+				<DialogContent>
+					<DialogContentText>{won ? `You guessed the word in ${currSquare[0] + 1} guess${currSquare[0] === 0 ? '' : 'es'}!` : 'Your caboose is loose.'}</DialogContentText>
+					<Button onClick={() => {
+              resetBoard();
+              setGameOver(false);
+            }}>Click Here to Start a new Game!</Button>
+				</DialogContent>
+			</Dialog>
+
+			<div className="board-area">
+				<div>{finalWord}</div>
+				{squares.map((rowArray, rowIndex) => {
+					return (
+						<div className="word-row" key={rowIndex}>
+							{rowArray.map((char, colIndex) => {
+								const key = rowIndex.toString() + colIndex.toString();
+								return renderSquare(
+									char,
+									key,
+									squareColors[rowIndex][colIndex]
+								);
+							})}
+						</div>
+					);
+				})}
+			</div>
+		</>
+	);
 };
 
 export default BoardArea;
