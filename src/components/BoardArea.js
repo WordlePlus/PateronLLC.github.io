@@ -55,8 +55,6 @@ const BoardArea = ({ setFinalWord, finalWord }) => {
 			let usedWord = false;
 			console.log(key);
 
-			if (!gameOver) {
-				console.log('enter NOT game over if statement');
 				switch (true) {
 					case /^[A-Za-z]{1}$/g.test(key):
 						key = key.toUpperCase();
@@ -149,8 +147,8 @@ const BoardArea = ({ setFinalWord, finalWord }) => {
 										finalWordLetterCache,
 										square
 									) &&
-									finalWordLetterCache[square] > 0 &&
-									newSquareColors[newCurrSquare[0]][squareIndex] === 'grey'
+									finalWordLetterCache[square] > 0 && 
+									newSquareColors[newCurrSquare[0]][squareIndex] !== 'green'
 								) {
 									newSquareColors[newCurrSquare[0]][squareIndex] = 'yellow';
 									finalWordLetterCache[square]--;
@@ -182,12 +180,8 @@ const BoardArea = ({ setFinalWord, finalWord }) => {
 					default:
 						console.log("Key down event didn't match");
 				}
-			}
-			if (gameOver && (key === 'Enter' || key === 'Return')) {
-				console.log('enter YES game over if statement');
-				setGameOver(false);
-				resetBoard();
-			}
+			
+		
 		}
 
 		// clear event listener
@@ -228,7 +222,7 @@ const BoardArea = ({ setFinalWord, finalWord }) => {
 			</Dialog>
 
 			<div className="board-area">
-				<div>{finalWord}</div>
+				{/* <div>{finalWord}</div> */}
 				{squares.map((rowArray, rowIndex) => {
 					return (
 						<div className="word-row" key={rowIndex}>
