@@ -10,8 +10,6 @@
 .word-row {
 	display: flex;
 	flex-direction: row;
-	/* justify-content: flex-start;
-	align-content: center; */
 	border-bottom: #4e2503;
 	border-width: 0.1em;
 }
@@ -35,12 +33,6 @@
 	box-shadow: 0em 0em 0.15em #ff811a;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-	.App-logo {
-		animation: App-logo-spin infinite .1s linear;
-	}
-}
-
 .App-header {
 	background-color: #4e321b;
 	min-height: 100vh;
@@ -50,15 +42,6 @@
 	justify-content: center;
 	font-size: calc(10px + 5vmin);
 	color: #fac589;
-}
-
-@keyframes App-logo-spin {
-	from {
-		transform: rotate(0deg);
-	}
-	to {
-		transform: rotate(360deg);
-	}
 }
 
 .tooltip-text {

@@ -5123,6 +5123,7 @@ export const WORDLIST = [
 	'roused',
 	'rouses',
 	'routed',
+	'router',
 	'routes',
 	'rovers',
 	'roving',
