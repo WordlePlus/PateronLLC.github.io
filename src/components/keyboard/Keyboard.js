@@ -47,6 +47,9 @@ export const Keyboard = ({ onChar, onDelete, onEnter, guesses, isRevealing }) =>
             isRevealing={isRevealing}
           />
         ))}
+        <Key width={68.3} value="DELETE" onClick={onClick}>
+          Delete
+        </Key>
       </div>
       <div className="flex justify-center mb-1">
         {['A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L'].map((key) => (
@@ -58,11 +61,11 @@ export const Keyboard = ({ onChar, onDelete, onEnter, guesses, isRevealing }) =>
             isRevealing={isRevealing}
           />
         ))}
-      </div>
-      <div className="flex justify-center">
-        <Key width={63.3} value="ENTER" onClick={onClick}>
+        <Key width={68.3} value="ENTER" onClick={onClick}>
           Enter
         </Key>
+      </div>
+      <div className="flex justify-center">
         {['Z', 'X', 'C', 'V', 'B', 'N', 'M'].map((key) => (
           <Key
             value={key}
@@ -72,9 +75,6 @@ export const Keyboard = ({ onChar, onDelete, onEnter, guesses, isRevealing }) =>
             isRevealing={isRevealing}
           />
         ))}
-        <Key width={63.3} value="DELETE" onClick={onClick}>
-          Delete
-        </Key>
       </div>
     </div>
   );
