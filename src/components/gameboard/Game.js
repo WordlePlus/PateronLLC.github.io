@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import BoardArea from './BoardArea';
-import { WORDLIST } from '../constants/wordlist.js';
+import BoardArea from './BoardArea.js';
+import { WORDLIST } from '../../constants/wordlist.js';
 
 const Game = () => {
   const getNewWord = () => {
