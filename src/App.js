@@ -1,5 +1,5 @@
 import logo from './logo.svg';
-import Game from './components/Game.js';
+import Game from './components/gameboard/Game.js';
 // import BoardArea from './components/BoardArea.js';
 import './App.css';
 
@@ -8,7 +8,6 @@ function App() {
     <div className="App">
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
-
         <Game />
       </header>
     </div>
