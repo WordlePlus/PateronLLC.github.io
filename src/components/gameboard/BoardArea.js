@@ -32,7 +32,7 @@ const BoardArea = ({
               ? `You guessed the word in ${currSquare[0] + 1} guess${
                   currSquare[0] === 0 ? '' : 'es'
                 }!`
-              : 'Your caboose is loose.'}
+              : 'Better luck next time.'}
           </DialogContentText>
           <Button
             onClick={() => {

@@ -108,7 +108,7 @@ function App() {
         newSquareColors[currSquare[0]][idx] = 'red';
       }
       setSquareColors(newSquareColors);
-      alert(`Sorry, ${currGuess} is not in our word list or word has been used already.`);
+      console.log(`Sorry, ${currGuess} is not in our word list or word has been used already.`);
     } else {
       // Cache letter frequency in finalWord
       const finalWordLetterCache = {};
@@ -194,12 +194,14 @@ function App() {
           setSquareColors={setSquareColors}
           currSquare={currSquare}
           setCurrSquare={setCurrSquare}
+          gameOver={gameOver}
           setGameOver={setGameOver}
           setWon={setWon}
           onChar={onChar}
           onDelete={onDelete}
           onEnter={onEnter}
           colorKeyboard={colorKeyboard}
+          resetBoard={resetBoard}
         />
       </header>
     </div>

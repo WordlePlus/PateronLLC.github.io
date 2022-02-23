@@ -9,12 +9,14 @@ export const Keyboard = ({
   setSquareColors,
   currSquare,
   setCurrSquare,
+  gameOver,
   setGameOver,
   setWon,
   onChar,
   onDelete,
   onEnter,
   colorKeyboard,
+  resetBoard,
 }) => {
   const onClick = (value) => {
     console.log(value);
@@ -38,12 +40,15 @@ export const Keyboard = ({
 
     function handleKeyUp({ key }) {
       switch (true) {
-        case key === 'Backspace' || key === 'Delete':
+        case key === 'Backspace' || (key === 'Delete' && !gameOver):
           onDelete();
           break;
 
         case (key === 'Enter' || key === 'Return') && currSquare[1] >= squares[0].length:
-          onEnter();
+          if (gameOver) {
+            resetBoard();
+            setGameOver(false);
+          } else onEnter();
           break;
 
         case key.length === 1 && key.toUpperCase() >= 'A' && key.toUpperCase() <= 'Z':
@@ -68,6 +73,8 @@ export const Keyboard = ({
     onChar,
     onDelete,
     onEnter,
+    gameOver,
+    resetBoard,
   ]);
 
   return (
