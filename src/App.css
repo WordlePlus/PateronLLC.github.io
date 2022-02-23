@@ -24,7 +24,7 @@
 	background-color: #6b492d;
 	color: #fac589;
 	box-shadow: 0.2em 0.2em 0.2em #4e2503;
-  font-size: x-large;
+	font-size: x-large;
 	font-weight: bold;
 }
 
@@ -45,20 +45,29 @@
 }
 
 .tooltip-text {
-  visibility: hidden;
-  width: 120px;
-  background-color: black;
-  color: #fff;
-  text-align: center;
-  padding: 5px 0;
-  border-radius: 6px;
- 
-  /* Position the tooltip text - see examples below! */
-  position: absolute;
-  z-index: 1;
+	visibility: hidden;
+	width: 120px;
+	background-color: black;
+	color: #fff;
+	text-align: center;
+	padding: 5px 0;
+	border-radius: 6px;
+
+	/* Position the tooltip text - see examples below! */
+	position: absolute;
+	z-index: 1;
 }
 
 /* Show the tooltip text when you mouse over the tooltip container */
 .letter-box:hover .tooltip-text {
-  visibility: visible;
+	visibility: visible;
 }
+
+.dialogtext {
+	white-space: pre-wrap;
+	text-align: center;
+}
+.dialog-content {
+	align-items: center;
+}
+
