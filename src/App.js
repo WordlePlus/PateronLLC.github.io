@@ -175,7 +175,7 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <h2>Wordle-Plus</h2>
+        <h2>Wordle Plus</h2>
         <BoardArea
           finalWord={finalWord}
           squares={squares}
