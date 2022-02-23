@@ -1,78 +1,123 @@
-// import { getStatuses } from '../../lib/statuses';
 import { Key } from './Key';
 import { useEffect } from 'react';
 
-export const Keyboard = ({ onChar, onDelete, onEnter, guesses, isRevealing }) => {
-  // const charStatuses = getStatuses(guesses);
-
+export const Keyboard = ({
+  finalWord,
+  squares,
+  setSquares,
+  squareColors,
+  setSquareColors,
+  currSquare,
+  setCurrSquare,
+  gameOver,
+  setGameOver,
+  setWon,
+  onChar,
+  onDelete,
+  onEnter,
+  colorKeyboard,
+  resetBoard,
+}) => {
   const onClick = (value) => {
-    if (value === 'ENTER') {
+    console.log(value);
+    if (value === 'Enter' && currSquare[1] >= squares[0].length) {
       onEnter();
-    } else if (value === 'DELETE') {
+    } else if (value === 'Delete') {
       onDelete();
-    } else {
+    } else if (value.length === 1 && value >= 'A' && value <= 'Z') {
       onChar(value);
+    } else {
+      if (!currSquare[1] >= squares[0].length) {
+        console.error('Exceeded character limit');
+      } else {
+        console.error(`Please complete row with ${squares[0].length} letters`);
+      }
     }
   };
 
   useEffect(() => {
-    const listener = (e) => {
-      console.log('e.code?', e.code);
-      if (e.code === 'Enter') {
-        onEnter();
-      } else if (e.code === 'Backspace') {
-        onDelete();
-      } else {
-        const { key } = e;
-        if (key.length === 1 && key >= 'A' && key <= 'Z') {
+    document.addEventListener('keyup', handleKeyUp);
+
+    function handleKeyUp({ key }) {
+      switch (true) {
+        case key === 'Backspace' || (key === 'Delete' && !gameOver):
+          onDelete();
+          break;
+
+        case (key === 'Enter' || key === 'Return') && currSquare[1] >= squares[0].length:
+          if (gameOver) {
+            resetBoard();
+            setGameOver(false);
+          } else onEnter();
+          break;
+
+        case key.length === 1 && key.toUpperCase() >= 'A' && key.toUpperCase() <= 'Z':
           onChar(key);
-        }
+          break;
+
+        default:
+          console.error("Key down event didn't match a letter, enter, or backspace.");
       }
-    };
-    window.addEventListener('keyup', listener);
-    return () => {
-      window.removeEventListener('keyup', listener);
-    };
-  }, [onEnter, onDelete, onChar]);
+    }
+    return () => document.removeEventListener('keyup', handleKeyUp);
+  }, [
+    finalWord,
+    currSquare,
+    squares,
+    squareColors,
+    setWon,
+    setCurrSquare,
+    setGameOver,
+    setSquareColors,
+    setSquares,
+    onChar,
+    onDelete,
+    onEnter,
+    gameOver,
+    resetBoard,
+  ]);
 
   return (
     <div>
-      <div className="flex justify-center mb-1">
+      <div>
         {['Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P'].map((key) => (
           <Key
             value={key}
             key={key}
             onClick={onClick}
-            // status={charStatuses[key]}
-            isRevealing={isRevealing}
+            colorKeyboardValue={
+              Object.prototype.hasOwnProperty.call(colorKeyboard, key) ? colorKeyboard[key] : 'tan'
+            }
           />
         ))}
-        <Key width={68.3} value="DELETE" onClick={onClick}>
+        <Key width={68.3} value="Delete" onClick={onClick}>
           Delete
         </Key>
       </div>
-      <div className="flex justify-center mb-1">
+      <div>
         {['A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L'].map((key) => (
           <Key
             value={key}
             key={key}
             onClick={onClick}
-            // status={charStatuses[key]}
-            isRevealing={isRevealing}
+            colorKeyboardValue={
+              Object.prototype.hasOwnProperty.call(colorKeyboard, key) ? colorKeyboard[key] : 'tan'
+            }
           />
         ))}
-        <Key width={68.3} value="ENTER" onClick={onClick}>
+        <Key width={68.3} value="Enter" onClick={onClick}>
           Enter
         </Key>
       </div>
-      <div className="flex justify-center">
+      <div>
         {['Z', 'X', 'C', 'V', 'B', 'N', 'M'].map((key) => (
           <Key
             value={key}
             key={key}
             onClick={onClick}
-            // status={charStatuses[key]}
-            isRevealing={isRevealing}
+            colorKeyboardValue={
+              Object.prototype.hasOwnProperty.call(colorKeyboard, key) ? colorKeyboard[key] : 'tan'
+            }
           />
         ))}
       </div>
