@@ -1,36 +1,17 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Button, Dialog, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
 import LetterBox from './LetterBox.js';
 
-const BoardArea = ({ setNewWord, finalWord, squares, setSquares, squareColors, setSquareColors, currSquare, setCurrSquare, gameOver, setGameOver, won, setWon, resetBoard, onChar, onDelete, onEnter }) => {
-
-  useEffect(() => {
-    document.addEventListener('keyup', handleKeyUp);
-
-    function handleKeyUp({ key }) {
-      console.log(key);
-      switch (true) {
-        case /^[A-Za-z]{1}$/g.test(key):
-          onChar(key);
-          break;
-
-        case key === 'Backspace' || key === 'Delete':
-          onDelete();
-          break;
-
-        case (key === 'Enter' || key === 'Return') && currSquare[1] >= squares[0].length:
-          onEnter();
-          break;
-
-        default:
-          console.log("Key down event didn't match");
-      }
-    }
-
-    // clear event listener
-    return () => document.removeEventListener('keyup', handleKeyUp);
-  }, [finalWord, currSquare, squares, squareColors, setWon, setCurrSquare, setGameOver, setSquareColors, setSquares, onChar, onDelete, onEnter]);
-
+const BoardArea = ({
+  finalWord,
+  squares,
+  squareColors,
+  currSquare,
+  gameOver,
+  setGameOver,
+  won,
+  resetBoard,
+}) => {
   const renderSquare = (char, key, color) => {
     return <LetterBox key={key} char={char} color={color} />;
   };
