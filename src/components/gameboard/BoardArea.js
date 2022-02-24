@@ -1,5 +1,7 @@
 import React from 'react';
 import {
+	Box,
+	Grid,
 	Button,
 	Dialog,
 	DialogContent,
@@ -32,7 +34,7 @@ const BoardArea = ({
 				}}
 			>
 				<DialogTitle>{won ? 'You won! 🎈' : 'You lost! 😔'}</DialogTitle>
-				<DialogContent className='dialog-content'>
+				<DialogContent className="dialog-content">
 					<DialogContentText className="dialogtext">
 						{won
 							? `You guessed the word in ${currSquare[0] + 1} guess${
@@ -53,10 +55,28 @@ const BoardArea = ({
 				</DialogContent>
 			</Dialog>
 
-			<div className="board-area">
+			<Box
+				sx={{
+					paddingBottom: '15px',
+					display: 'flex',
+					flexDirection: 'column',
+          justifyContent: 'center',
+					alignItems: 'center',
+				}}
+			>
 				{squares.map((rowArray, rowIndex) => {
 					return (
-						<div className="word-row" key={rowIndex}>
+						<Grid
+							container
+							key={`row-container-${rowIndex}`}
+							sx={{
+								width: 'min(90vw, 522px)',
+								display: 'flex',
+								flexDirection: 'row',
+								alignItems: 'center',
+								justifyContent: 'center',
+							}}
+						>
 							{rowArray.map((char, colIndex) => {
 								const key = rowIndex.toString() + colIndex.toString();
 								return renderSquare(
@@ -65,10 +85,10 @@ const BoardArea = ({
 									squareColors[rowIndex][colIndex]
 								);
 							})}
-						</div>
+						</Grid>
 					);
 				})}
-			</div>
+			</Box>
 		</>
 	);
 };

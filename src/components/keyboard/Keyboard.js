@@ -1,5 +1,6 @@
 import { Key } from './Key';
 import { useEffect } from 'react';
+import { Grid, Box } from '@mui/material';
 
 export const Keyboard = ({
   finalWord,
@@ -78,49 +79,51 @@ export const Keyboard = ({
   ]);
 
   return (
-    <div>
-      <div>
+    <Box sx={{ display:'flex', flexDirection:"column", justifyContent:'center', alignItems:'center'}}>
+      <Grid container spacing={1} sx={{maxWidth:'510px', margin:'6px', display:'flex', justifyContent:'space-around'}}>
+        <Key width={40} value="Delete" onClick={onClick} colorKeyboardValue="rgb(226, 232, 240)">
+          Delete
+        </Key>
+        <Key width={40} value="Enter" onClick={onClick} colorKeyboardValue="rgb(226, 232, 240)">
+          Enter
+        </Key>
+      </Grid>
+      <Grid container spacing={1} sx={{maxWidth:'510px', margin:'6px', display:'flex', justifyContent:'space-between'}}>
         {['Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P'].map((key) => (
           <Key
             value={key}
             key={key}
             onClick={onClick}
             colorKeyboardValue={
-              Object.prototype.hasOwnProperty.call(colorKeyboard, key) ? colorKeyboard[key] : 'tan'
+              Object.prototype.hasOwnProperty.call(colorKeyboard, key) ? colorKeyboard[key] : 'rgb(226, 232, 240)'
             }
           />
         ))}
-        <Key width={68.3} value="Delete" onClick={onClick}>
-          Delete
-        </Key>
-      </div>
-      <div>
+      </Grid>
+      <Grid container spacing={1} sx={{maxWidth:'510px', margin:'6px', display:'flex', justifyContent:'space-between'}}>
         {['A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L'].map((key) => (
           <Key
             value={key}
             key={key}
             onClick={onClick}
             colorKeyboardValue={
-              Object.prototype.hasOwnProperty.call(colorKeyboard, key) ? colorKeyboard[key] : 'tan'
+              Object.prototype.hasOwnProperty.call(colorKeyboard, key) ? colorKeyboard[key] : 'rgb(226, 232, 240)'
             }
           />
         ))}
-        <Key width={68.3} value="Enter" onClick={onClick}>
-          Enter
-        </Key>
-      </div>
-      <div>
+      </Grid>
+      <Grid container spacing={1} sx={{maxWidth:'510px', margin:'6px', display:'flex', justifyContent:'space-between'}}>
         {['Z', 'X', 'C', 'V', 'B', 'N', 'M'].map((key) => (
           <Key
             value={key}
             key={key}
             onClick={onClick}
             colorKeyboardValue={
-              Object.prototype.hasOwnProperty.call(colorKeyboard, key) ? colorKeyboard[key] : 'tan'
+              Object.prototype.hasOwnProperty.call(colorKeyboard, key) ? colorKeyboard[key] : 'rgb(226, 232, 240)'
             }
           />
         ))}
-      </div>
-    </div>
+      </Grid>
+    </Box>
   );
 };
