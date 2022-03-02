@@ -146,7 +146,7 @@ function App() {
 				) {
 					newSquareColors[currSquare[0]][squareIndex] = 'yellow';
 					finalWordLetterCache[square]--;
-					newColorKeyboard[square] = 'yellow';
+					if(newColorKeyboard[square] !== 'green')  newColorKeyboard[square] = 'yellow';
 				}
 			});
 
@@ -159,7 +159,7 @@ function App() {
 					console.log('newSquareColors:',newSquareColors);
 					console.log('finalWordLetterCache',finalWordLetterCache)
 					newSquareColors[currSquare[0]][squareIndex] = 'gray';
-					newColorKeyboard[square] = 'gray';
+					if(newColorKeyboard[square] !== 'green' && newColorKeyboard[square] !== 'yellow')  newColorKeyboard[square] = 'gray';
 				}
 			});
 
