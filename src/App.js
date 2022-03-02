@@ -15,7 +15,7 @@ function App() {
 	);
 	const [squareColors, setSquareColors] = useState(
 		Array.from({ length: NUM_GUESSES }, (value, index) =>
-			Array.from({ length: WORD_LENGTH }, (value1, index1) => 'gray')
+			Array.from({ length: WORD_LENGTH }, (value1, index1) => 'lightgray')
 		)
 	);
 	const [currSquare, setCurrSquare] = useState([0, 0]);
@@ -30,7 +30,7 @@ function App() {
 		const newSquareColors = Array.from(
 			{ length: NUM_GUESSES },
 			(value, index) =>
-				Array.from({ length: WORD_LENGTH }, (value1, index1) => 'gray')
+				Array.from({ length: WORD_LENGTH }, (value1, index1) => 'lightgray')
 		);
 		const newCurrSquare = [0, 0];
 		setSquares(newSquares);
@@ -70,7 +70,7 @@ function App() {
 			setSquareColors((prevSquareColors) => {
 				const newSquareColors = deepClone(prevSquareColors);
 				for (let idx in newSquareColors[currSquare[0]]) {
-					newSquareColors[currSquare[0]][idx] = 'gray';
+					newSquareColors[currSquare[0]][idx] = 'lightgray';
 				}
 				return newSquareColors;
 			});
@@ -150,10 +150,15 @@ function App() {
 				}
 			});
 
+			// Letter doesn't match any letter in solution or cache is empty, turn dark gray
 			squares[currSquare[0]].forEach((square, squareIndex) => {
 				if (
-					!Object.prototype.hasOwnProperty.call(finalWordLetterCache, square)
+					!Object.prototype.hasOwnProperty.call(finalWordLetterCache, square) || 
+					(finalWordLetterCache[square] === 0 && newSquareColors[currSquare[0]][squareIndex] === 'lightgray')
 				) {
+					console.log('newSquareColors:',newSquareColors);
+					console.log('finalWordLetterCache',finalWordLetterCache)
+					newSquareColors[currSquare[0]][squareIndex] = 'gray';
 					newColorKeyboard[square] = 'gray';
 				}
 			});

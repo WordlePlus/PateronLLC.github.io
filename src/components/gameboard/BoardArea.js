@@ -29,23 +29,23 @@ const BoardArea = ({
 			<Dialog
 				open={gameOver}
 				onClose={() => {
-					resetBoard();
 					setGameOver(false);
+					resetBoard();
 				}}
 			>
 				<DialogTitle>{won ? 'You won! 🎈' : 'You lost! 😔'}</DialogTitle>
 				<DialogContent className="dialog-content">
 					<DialogContentText className="dialogtext">
 						{won
-							? `You guessed the word in ${currSquare[0] + 1} guess${
+							? `You guessed the word, ${finalWord}, in ${currSquare[0] + 1} guess${
 									currSquare[0] === 0 ? '' : 'es'
 							  }!`
 							: `The solution was ${finalWord}.\nBetter luck next time.`}
 					</DialogContentText>
 					<Button
 						onClick={() => {
-							resetBoard();
 							setGameOver(false);
+							resetBoard();
 						}}
 						variant="contained"
 						className="dialogtext"
@@ -57,7 +57,7 @@ const BoardArea = ({
 
 			<Box
 				sx={{
-					paddingBottom: '15px',
+					paddingBottom: '10px',
 					display: 'flex',
 					flexDirection: 'column',
           justifyContent: 'center',
