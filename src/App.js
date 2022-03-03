@@ -25,20 +25,20 @@ function App() {
 
   const resetBoard = () => {
     const newSquares = Array.from({ length: NUM_GUESSES }, (value, index) =>
-    Array.from({ length: WORD_LENGTH }, (value1, index1) => ''),
+      Array.from({ length: WORD_LENGTH }, (value1, index1) => ''),
     );
     const newSquareColors = Array.from({ length: NUM_GUESSES }, (value, index) =>
-    Array.from({ length: WORD_LENGTH }, (value1, index1) => 'lightgray'),
+      Array.from({ length: WORD_LENGTH }, (value1, index1) => 'lightgray'),
     );
     const newCurrSquare = [0, 0];
     setGameOver(false);
-    new Promise((resolve) => setTimeout(resolve, 300), (reject) => console.error(reject)).then(()=>{
+    new Promise((resolve) => setTimeout(() => resolve('Reset state to new game'), 0)).then(() => {
       setSquares(newSquares);
       setSquareColors(newSquareColors);
       setCurrSquare(newCurrSquare);
       setNewWord();
       setColorKeyboard({});
-    })
+    });
   };
 
   const deepClone = (input) => {
