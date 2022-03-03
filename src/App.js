@@ -31,11 +31,14 @@ function App() {
       Array.from({ length: WORD_LENGTH }, (value1, index1) => 'lightgray'),
     );
     const newCurrSquare = [0, 0];
-    setSquares(newSquares);
-    setSquareColors(newSquareColors);
-    setCurrSquare(newCurrSquare);
-    setNewWord();
-    setColorKeyboard({});
+    setGameOver(false);
+    new Promise((resolve) => setTimeout(() => resolve('Reset state to new game'), 0)).then(() => {
+      setSquares(newSquares);
+      setSquareColors(newSquareColors);
+      setCurrSquare(newCurrSquare);
+      setNewWord();
+      setColorKeyboard({});
+    });
   };
 
   const deepClone = (input) => {
@@ -153,32 +156,50 @@ function App() {
           || (finalWordLetterCache[square] === 0
             && newSquareColors[currSquare[0]][squareIndex] === 'lightgray')
         ) {
-          // console.log('newSquareColors:',newSquareColors);
-          // console.log('finalWordLetterCache',finalWordLetterCache)
           newSquareColors[currSquare[0]][squareIndex] = 'gray';
           if (newColorKeyboard[square] !== 'green' && newColorKeyboard[square] !== 'yellow')
             newColorKeyboard[square] = 'gray';
         }
       });
 
-      setSquareColors(newSquareColors);
-      setColorKeyboard(newColorKeyboard);
-
-      //check to see if the row matches the final word
-      if (currGuess === finalWord) {
-        setWon(true);
-        setGameOver(true);
-      } else if (currSquare[0] >= squares.length - 1) {
-        setWon(false);
-        setGameOver(true);
-      } else {
-        setCurrSquare((prevCurrSquare) => {
-          const newCurrSquare = deepClone(prevCurrSquare);
-          newCurrSquare[0]++;
-          newCurrSquare[1] = 0;
-          return newCurrSquare;
+      // Animate current guess
+      let animateIndex = 0;
+      const newRowColors = newSquareColors[currSquare[0]];
+      const interval = setInterval(() => {
+        const newColorsToUpdate = newRowColors.map((value, index) => {
+          if (index <= animateIndex) return value;
+          else return 'lightgray';
         });
-      }
+        const animateSquareColors = deepClone(newSquareColors);
+        animateSquareColors[currSquare[0]] = newColorsToUpdate;
+        setSquareColors(animateSquareColors);
+
+        // After final letter animation
+        if (animateIndex >= squares.length - 1) {
+          clearInterval(interval);
+
+          //check to see if the row matches the final word, if match, win game
+          if (currGuess === finalWord) {
+            setWon(true);
+            setGameOver(true);
+            // If guess is last guess, and no match, lose game
+          } else if (currSquare[0] >= squares.length - 1) {
+            setWon(false);
+            setGameOver(true);
+            // If guess is no match, increment to next row
+          } else {
+            setCurrSquare((prevCurrSquare) => {
+              const newCurrSquare = deepClone(prevCurrSquare);
+              newCurrSquare[0]++;
+              newCurrSquare[1] = 0;
+              return newCurrSquare;
+            });
+          }
+        }
+        animateIndex++;
+      }, 333);
+      // setSquareColors(newSquareColors);
+      setColorKeyboard(newColorKeyboard);
     }
   };
 

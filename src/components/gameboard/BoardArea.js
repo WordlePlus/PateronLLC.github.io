@@ -16,7 +16,6 @@ const BoardArea = ({
 	squareColors,
 	currSquare,
 	gameOver,
-	setGameOver,
 	won,
 	resetBoard,
 }) => {
@@ -29,7 +28,6 @@ const BoardArea = ({
 			<Dialog
 				open={gameOver}
 				onClose={() => {
-					setGameOver(false);
 					resetBoard();
 				}}
 			>
@@ -44,7 +42,6 @@ const BoardArea = ({
 					</DialogContentText>
 					<Button
 						onClick={() => {
-							setGameOver(false);
 							resetBoard();
 						}}
 						variant="contained"
