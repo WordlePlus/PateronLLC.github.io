@@ -162,24 +162,44 @@ function App() {
         }
       });
 
-      setSquareColors(newSquareColors);
-      setColorKeyboard(newColorKeyboard);
-
-      //check to see if the row matches the final word
-      if (currGuess === finalWord) {
-        setWon(true);
-        setGameOver(true);
-      } else if (currSquare[0] >= squares.length - 1) {
-        setWon(false);
-        setGameOver(true);
-      } else {
-        setCurrSquare((prevCurrSquare) => {
-          const newCurrSquare = deepClone(prevCurrSquare);
-          newCurrSquare[0]++;
-          newCurrSquare[1] = 0;
-          return newCurrSquare;
+      // Animate current guess
+      let animateIndex = 0;
+      const newRowColors = newSquareColors[currSquare[0]];
+      const interval = setInterval(() => {
+        const newColorsToUpdate = newRowColors.map((value, index) => {
+          if (index <= animateIndex) return value;
+          else return 'lightgray';
         });
-      }
+        const animateSquareColors = deepClone(newSquareColors);
+        animateSquareColors[currSquare[0]] = newColorsToUpdate;
+        setSquareColors(animateSquareColors);
+
+        // After final letter animation
+        if (animateIndex >= squares.length - 1) {
+          clearInterval(interval);
+
+          //check to see if the row matches the final word, if match, win game
+          if (currGuess === finalWord) {
+            setWon(true);
+            setGameOver(true);
+            // If guess is last guess, and no match, lose game
+          } else if (currSquare[0] >= squares.length - 1) {
+            setWon(false);
+            setGameOver(true);
+            // If guess is no match, increment to next row
+          } else {
+            setCurrSquare((prevCurrSquare) => {
+              const newCurrSquare = deepClone(prevCurrSquare);
+              newCurrSquare[0]++;
+              newCurrSquare[1] = 0;
+              return newCurrSquare;
+            });
+          }
+        }
+        animateIndex++;
+      }, 333);
+      // setSquareColors(newSquareColors);
+      setColorKeyboard(newColorKeyboard);
     }
   };
 
