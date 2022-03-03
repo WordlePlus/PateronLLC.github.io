@@ -25,17 +25,20 @@ function App() {
 
   const resetBoard = () => {
     const newSquares = Array.from({ length: NUM_GUESSES }, (value, index) =>
-      Array.from({ length: WORD_LENGTH }, (value1, index1) => ''),
+    Array.from({ length: WORD_LENGTH }, (value1, index1) => ''),
     );
     const newSquareColors = Array.from({ length: NUM_GUESSES }, (value, index) =>
-      Array.from({ length: WORD_LENGTH }, (value1, index1) => 'lightgray'),
+    Array.from({ length: WORD_LENGTH }, (value1, index1) => 'lightgray'),
     );
     const newCurrSquare = [0, 0];
-    setSquares(newSquares);
-    setSquareColors(newSquareColors);
-    setCurrSquare(newCurrSquare);
-    setNewWord();
-    setColorKeyboard({});
+    setGameOver(false);
+    new Promise((resolve) => setTimeout(resolve, 300), (reject) => console.error(reject)).then(()=>{
+      setSquares(newSquares);
+      setSquareColors(newSquareColors);
+      setCurrSquare(newCurrSquare);
+      setNewWord();
+      setColorKeyboard({});
+    })
   };
 
   const deepClone = (input) => {
@@ -153,8 +156,6 @@ function App() {
           || (finalWordLetterCache[square] === 0
             && newSquareColors[currSquare[0]][squareIndex] === 'lightgray')
         ) {
-          // console.log('newSquareColors:',newSquareColors);
-          // console.log('finalWordLetterCache',finalWordLetterCache)
           newSquareColors[currSquare[0]][squareIndex] = 'gray';
           if (newColorKeyboard[square] !== 'green' && newColorKeyboard[square] !== 'yellow')
             newColorKeyboard[square] = 'gray';

@@ -11,7 +11,6 @@ export const Keyboard = ({
   currSquare,
   setCurrSquare,
   gameOver,
-  setGameOver,
   setWon,
   onChar,
   onDelete,
@@ -48,7 +47,6 @@ export const Keyboard = ({
         case (key === 'Enter' || key === 'Return') && currSquare[1] >= squares[0].length:
           if (gameOver) {
             resetBoard();
-            setGameOver(false);
           } else onEnter();
           break;
 
@@ -68,7 +66,6 @@ export const Keyboard = ({
     squareColors,
     setWon,
     setCurrSquare,
-    setGameOver,
     setSquareColors,
     setSquares,
     onChar,
